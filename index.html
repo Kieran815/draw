@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Drawing with JavaScript</title>
+    <base href="./">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dist/css/main.css" type="text/css">
+    <link href="favicon.ico" rel="icon" type="image/x-icon" />
+  </head>
+  <body>
+    <h1>Drawing with JavaScript</h1>
+    <canvas id="canvas" height="600px" width="800px"></canvas>
+    <script src="dist/js/main.js"></script>
+    <script>
+      // define canvas
+      var canvas = document.getElementById('canvas');
+      // add context
+      var ctx = canvas.getContext('2d');
+      // set random x
+      var x = Math.random() * 700;
+      // set random y
+      var y = Math.random() * 500;
+      // set random color
+      ctx.fillStyle = '#' + Math.floor(Math.random()*16777215).toString(16);
+      // fill rect
+      // For a rectangle the x,y coordinates represent the top left corner of the rectangle
+      // the third and fourth arguments of fillRect represent the height and width
+      ctx.fillRect(10,10,100,100);
+
+      //Create a circle
+      // the third and fourth arguments represent the start and ending point of the arc to be drawn
+      // for a complete circle you will always start at 0 and end at tau or pi^2 (2*pi).
+      ctx.beginPath();
+      ctx.arc(230, 400, 83, 0, 2 * Math.PI);
+      ctx.stroke();
+    </script>
+  </body>
+</html>
