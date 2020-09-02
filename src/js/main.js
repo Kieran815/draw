@@ -33,23 +33,21 @@ var draw = (function() {
     //What shape are we drawing?
     shape='',
 
+    // color
+    colorSel = '',
     //Are we drawimg a path?
     isDrawing=false;
 
   return {
-
     //Set the x,y coords based on current event data
     setXY: function(evt) {
-
       //Track last x,y position before setting the current posiiton.
       lx=x;
       ly=y;
-
       //Set the current x,y position
       x = (evt.clientX - rect.left) - canvas.offsetLeft;
       y = (evt.clientY - rect.top) - canvas.offsetTop;
     },
-
     //Write the x,y coods to the target div
     writeXY: function() {
       document.getElementById('trackX').innerHTML = 'X: ' + x;
@@ -77,6 +75,25 @@ var draw = (function() {
       return shape;
     },
 
+    //Set a random color
+    randColor: function(){
+      return '#' + Math.floor(Math.random()*16777215).toString(16);
+    },
+
+    setColor: function(color) {
+      colorSel = color;
+      console.table(colorSel, color);
+    },
+
+    getColor: function() {
+      if (colorSel.length > 5) {
+        return colorSel;
+        console.log(colorSel);
+      }
+      return this.randColor();
+      console.log(colorSel);
+    },
+
     setIsDrawing: function(bool) {
       isDrawing = bool;
     },
@@ -84,7 +101,7 @@ var draw = (function() {
     getIsDrawing: function() {
       return isDrawing;
     },
-    
+
     //Draws the selected shape
     draw: function() {
       ctx.restore();
@@ -97,16 +114,26 @@ var draw = (function() {
         this.drawPath();
       } else if( shape==='circle' ) {
         this.drawCircle();
+      } else if (shape ==='triangle') {
+        this.drawTri();
       } else {
-        alert('Please choose a shape');
+        alert('Select a Shape');
       }
       ctx.save();
     },
 
+    //Draw a rectangle
+    drawRect: function() {
+      //Start by using random fill colors.
+      ctx.fillStyle = this.getColor();
+      ctx.fillRect (x1,y1,(x2-x1),(y2-y1));
+    },
+
     //Draw a circle
     drawCircle: function() {
-      ctx.strokeStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
-      ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+
+      ctx.strokeStyle = this.getColor();
+      ctx.fillStyle = this.getColor();
 
       let a = (x1-x2)
       let b = (y1-y2)
@@ -118,10 +145,46 @@ var draw = (function() {
       ctx.fill();
     },
 
+    //Draw a triangle
+    drawTri: function(){
+
+      //x1,y1 to x2,y2 is the first line we will use the first point +/- 
+      //(depending on the direction of the mouse movement) the result of 
+      //PT to add a third point. 
+      var a = (x1-x2);
+      var b = (y1-y2);
+      var c = Math.sqrt(a*a + b*b);
+
+      var d = x1+c;
+      var e = y1+c;
+
+      //Drag left to right
+      if(x1>x2){
+          d=x1-c;
+      }
+
+      //Drag up
+      if(y1>y2){
+          e=y1-c;
+      }
+  
+      ctx.fillStyle = this.getColor();
+      ctx.strokeStyle = this.getColor();
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+
+      ctx.lineTo(d,e);
+      ctx.lineTo(x2, y2);
+
+      ctx.lineTo(x1, y1);
+      ctx.stroke();
+      ctx.fill();
+    },
+
     //Draw a line
     drawLine: function() {
       //Start by using random fill colors.
-      ctx.strokeStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+      ctx.strokeStyle = this.getColor();
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
@@ -132,19 +195,13 @@ var draw = (function() {
     drawPath: function() {
       //console.log({x1:x,y1:y,x2:x2,y2:y2});
       //Start by using random fill colors.
-      ctx.strokeStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+      ctx.strokeStyle = this.getColor();
       ctx.beginPath();
       ctx.moveTo(lx, ly);
       ctx.lineTo(x, y);
       ctx.stroke();
     },
 
-    //Draw a rectangle
-    drawRect: function() {
-      //Start by using random fill colors.
-      ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
-      ctx.fillRect (x1,y1,(x2-x1),(y2-y1));
-    },
 
     getCanvas: function(){
       return canvas;
@@ -158,6 +215,7 @@ var draw = (function() {
 
     }
   };
+
 })();
 
 //Initialize draw
@@ -193,14 +251,22 @@ document.getElementById('btnRect').addEventListener('click', function(){
   draw.setShape('rectangle');
 }, false);
 
-document.getElementById('btnLine').addEventListener('click', function(){
-  draw.setShape('line');
-}, false);
-
 document.getElementById('btnCircle').addEventListener('click', function(){
   draw.setShape('circle');
+}, false);
+
+document.getElementById('btnTriangle').addEventListener('click',function(){
+  draw.setShape('triangle');
+}, false);
+
+document.getElementById('btnLine').addEventListener('click', function(){
+  draw.setShape('line');
 }, false);
 
 document.getElementById('btnPath').addEventListener('click', function(){
   draw.setShape('path');
 }, false);
+
+document.getElementById('clrPkr').addEventListener('change', function(){
+draw.setColor(document.getElementById('clrPkr').value);
+});
