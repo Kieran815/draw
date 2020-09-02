@@ -38,3 +38,8 @@ nav ul li button {
 nav ul li button {
   width: 100%;
 }
+
+#start {
+  width: 80vw;
+  height: 5vh;
+}

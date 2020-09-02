@@ -5,11 +5,14 @@
     <title>Drawing with JavaScript</title>
     <base href="./">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="dist/css/main.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="src/css/main.css" >
     <link href="favicon.ico" rel="icon" type="image/x-icon" />
   </head>
   <body>
-    <h1>Drawing with JavaScript</h1>
+    <div>
+      <h1>Drawing with JavaScript</h1>
+      <button id="start"><a href="program.html">Start Drawing</a></button>
+    </div>
     <canvas id="canvas" height="600px" width="800px"></canvas>
     <script src="dist/js/main.js"></script>
     <script>
@@ -26,14 +29,16 @@
       // fill rect
       // For a rectangle the x,y coordinates represent the top left corner of the rectangle
       // the third and fourth arguments of fillRect represent the height and width
-      ctx.fillRect(10,10,100,100);
+      ctx.fillRect(x, y, 100, 100);
 
       //Create a circle
       // the third and fourth arguments represent the start and ending point of the arc to be drawn
       // for a complete circle you will always start at 0 and end at tau or pi^2 (2*pi).
       ctx.beginPath();
-      ctx.arc(230, 400, 83, 0, 2 * Math.PI);
+      ctx.arc(x / 2, y * 2, 83, 0, 2 * Math.PI);
       ctx.stroke();
+      ctx.fillStyle = '#' + Math.floor(Math.random()*16777215).toString(16);
+      ctx.fill();
     </script>
   </body>
 </html>
