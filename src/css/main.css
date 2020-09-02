@@ -39,6 +39,12 @@ nav ul li button {
   width: 100%;
 }
 
+.nav-con {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
 #start {
   width: 80vw;
   height: 5vh;
